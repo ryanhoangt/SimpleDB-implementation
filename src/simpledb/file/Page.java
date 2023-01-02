@@ -26,6 +26,10 @@ public class Page {
         return bb.getInt(offset);
     }
 
+    /**
+     * Write byte array to page: length first, then data.
+     * Require [b.length + Integer.BYTES] bytes.
+     */
     public void setBytes(int offset, byte[] b) {
         bb.position(offset);
         bb.putInt(b.length); // length of byte array

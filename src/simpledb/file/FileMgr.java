@@ -60,7 +60,7 @@ public class FileMgr {
      * automatically extend the file
      */
     public synchronized BlockId append(String filename) {
-        int newblknum = length(filename);
+        int newblknum = lengthInBlocks(filename);
         BlockId blk = new BlockId(filename, newblknum);
         byte[] b = new byte[blocksize];
         try {
@@ -73,7 +73,7 @@ public class FileMgr {
         return blk;
     }
 
-    public int length(String filename) {
+    public int lengthInBlocks(String filename) {
         try {
             RandomAccessFile f = getFile(filename);
             return (int) (f.length() / blocksize);

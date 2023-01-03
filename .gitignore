@@ -3,5 +3,4 @@
 
 out/
 
-filetestdir/
-logtestdir/
+*testdir/

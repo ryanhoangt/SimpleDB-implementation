@@ -4,6 +4,7 @@ import simpledb.buffer.BufferMgr;
 import simpledb.file.BlockId;
 import simpledb.file.FileMgr;
 import simpledb.log.LogMgr;
+import simpledb.tx.Transaction;
 
 import java.io.File;
 
@@ -21,6 +22,13 @@ public class SimpleDB {
         fm = new FileMgr(dbDirectory, blocksize);
         lm = new LogMgr(fm, LOG_FILE);
         bm = new BufferMgr(fm, lm, buffsize);
+    }
+
+    /**
+     * A convenient way for clients to create transactions
+     */
+    public Transaction newTx() {
+        return new Transaction(fm, lm, bm);
     }
 
     public FileMgr fileMgr() {

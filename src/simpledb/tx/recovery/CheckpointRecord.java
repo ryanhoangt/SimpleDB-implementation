@@ -27,6 +27,12 @@ public class CheckpointRecord implements LogRecord {
         return "<CHECKPOINT>";
     }
 
+    /**
+     * A static method to write a checkpoint record to the log.
+     * This log record contains the CHECKPOINT operator,
+     * and nothing else.
+     * @return the LSN of the last log value
+     */
     public static int writeToLog(LogMgr lm) {
         byte[] rec = new byte[Integer.BYTES];
         Page p = new Page(rec);

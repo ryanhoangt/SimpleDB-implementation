@@ -26,21 +26,21 @@ public interface LogRecord {
      */
     void undo(Transaction tx);
 
-    static LogRecord createLogRecord(byte[] bytes) {
+    static LogRecord reconstructLogRecord(byte[] bytes) {
         Page p = new Page(bytes);
         switch (p.getInt(0)) {
             case CHECKPOINT:
                 return new CheckpointRecord();
             case START:
-                return new StartRecord();
+                return new StartRecord(p);
             case COMMIT:
-                return new CommitRecord();
+                return new CommitRecord(p);
             case ROLLBACK:
-                return new RollbackRecord();
+                return new RollbackRecord(p);
             case SETINT:
-                return new SetIntRecord();
+                return new SetIntRecord(p);
             case SETSTRING:
-                return new SetStringRecord();
+                return new SetStringRecord(p);
             default:
                 return null;
         }

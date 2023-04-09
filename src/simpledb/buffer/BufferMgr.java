@@ -71,9 +71,9 @@ public class BufferMgr {
         Buffer buffer = findExistingBuffer(blkId);
         if (buffer == null) { // no existing buffer with that blkId
             buffer = chooseUnpinnedBuffer();
-            if (buffer == null) // all pages are pinned
+            if (buffer == null) // all buffers are pinned
                 return null;
-            // buffer: an unpinned pages chosen using Naive strategy
+            // buffer: an unpinned buffer chosen using Naive strategy
             buffer.assignToBlock(blkId);
         }
         // buffer can be an existing pinned one, or a new

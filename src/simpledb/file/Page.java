@@ -54,9 +54,12 @@ public class Page {
         return new String(b, CHARSET);
     }
 
-    // utility method to determine max number of bytes required
-    // to store strlen characters and one beginning number, using
-    // CHARSET
+    /**
+     * An utility method to determine max number of bytes required
+     * to store strlen characters and one beginning number, using CHARSET
+     * @param strlen number of chars in the target string
+     * @return
+     */
     public static int maxLength(int strlen) {
         float bytesPerChar = CHARSET.newEncoder().maxBytesPerChar();
         return Integer.BYTES + (strlen * (int) bytesPerChar);

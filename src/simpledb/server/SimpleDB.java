@@ -4,6 +4,7 @@ import simpledb.buffer.BufferMgr;
 import simpledb.file.BlockId;
 import simpledb.file.FileMgr;
 import simpledb.log.LogMgr;
+import simpledb.metadata.MetaDataMgr;
 import simpledb.tx.Transaction;
 
 import java.io.File;
@@ -16,7 +17,30 @@ public class SimpleDB {
     private FileMgr fm;
     private LogMgr lm;
     private BufferMgr bm;
+    private MetaDataMgr mdm;
 
+    /**
+     * The constructor for most situations. Unlike the debugging constructor,
+     * it also initializes the metadata tables.
+     * @param dirname the name of the database directory
+     */
+    public SimpleDB(String dirname) {
+        this(dirname, BLOCK_SIZE, BUFFER_SIZE);
+        Transaction tx = newTx();
+        boolean isNew = fm.isNew();
+        if (isNew)
+            System.out.println("Creating new database...");
+        else {
+            System.out.println("Recovering existing database...");
+            tx.recover();
+        }
+        mdm = new MetaDataMgr(isNew, tx);
+        tx.commit();
+    }
+
+    /**
+     * A constructor useful for debugging.
+     */
     public SimpleDB(String dirname, int blocksize, int buffsize) {
         File dbDirectory = new File(dirname);
         fm = new FileMgr(dbDirectory, blocksize);

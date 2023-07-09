@@ -5,6 +5,9 @@ import simpledb.query.Predicate;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Data for the SQL <i>select</i> statement.
+ */
 public class QueryData {
 
     private List<String> fields;

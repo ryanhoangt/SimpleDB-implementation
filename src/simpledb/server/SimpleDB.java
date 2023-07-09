@@ -5,6 +5,7 @@ import simpledb.file.BlockId;
 import simpledb.file.FileMgr;
 import simpledb.log.LogMgr;
 import simpledb.metadata.MetaDataMgr;
+import simpledb.plan.*;
 import simpledb.tx.Transaction;
 
 import java.io.File;
@@ -18,6 +19,7 @@ public class SimpleDB {
     private LogMgr lm;
     private BufferMgr bm;
     private MetaDataMgr mdm;
+    private Planner planner;
 
     /**
      * The constructor for most situations. Unlike the debugging constructor,
@@ -35,6 +37,9 @@ public class SimpleDB {
             tx.recover();
         }
         mdm = new MetaDataMgr(isNew, tx);
+        QueryPlanner qp = new BasicQueryPlanner(mdm);
+        UpdatePlanner up = new BasicUpdatePlanner(mdm);
+        planner = new Planner(qp, up);
         tx.commit();
     }
 
@@ -65,5 +70,13 @@ public class SimpleDB {
 
     public BufferMgr bufferMgr() {
         return bm;
+    }
+
+    public MetaDataMgr metaDataMgr() {
+        return mdm;
+    }
+
+    public Planner planner() {
+        return planner;
     }
 }

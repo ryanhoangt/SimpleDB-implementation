@@ -1,5 +1,6 @@
 package simpledb.query;
 
+import simpledb.plan.Plan;
 import simpledb.record.Schema;
 
 import java.util.ArrayList;
@@ -86,6 +87,55 @@ public class Predicate {
             return Optional.empty();
         else
             return Optional.of(res);
+    }
+
+    /**
+    * Determine if there is a term of the form "F=c"
+    * where F is the specified field and c is some constant.
+    * If so, the method returns that constant.
+    * If not, the method returns null.
+    * @param fldName the name of the field
+    * @return either the constant or null
+    */
+    public Constant equatesWithConstant(String fldName) {
+        for (Term t: terms) {
+            Constant c = t.equatesWithConstant(fldName);
+            if (c != null)
+                return c;
+        }
+        return null;
+    }
+
+    /**
+     * Determine if there is a term of the form "F1=F2"
+     * where F1 is the specified field and F2 is another field.
+     * If so, the method returns the name of that field.
+     * If not, the method returns null.
+     * @param fldName the name of the field
+     * @return the name of the other field, or null
+     */
+    public String equatesWithField(String fldName) {
+        for (Term t: terms) {
+            String s = t.equatesWithField(fldName);
+            if (s != null) return s;
+        }
+        return null;
+    }
+
+    /**
+     * Calculate the extent to which selecting on the predicate
+     * reduces the number of records output by a query.
+     * For example if the reduction factor is 2, then the
+     * predicate cuts the size of the output in half.
+     * @param plan the query's plan
+     * @return the integer reduction factor.
+     */
+    public int reductionFactor(Plan plan) {
+        int factor = 1;
+        for (Term t: terms) {
+            factor *= t.reductionFactor(plan);
+        }
+        return factor;
     }
 
     @Override

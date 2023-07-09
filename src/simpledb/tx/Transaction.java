@@ -114,7 +114,7 @@ public class Transaction {
 
     public BlockId append(String filename) {
         BlockId dummyBlk = new BlockId(filename, END_OF_FILE);
-        concurrencyMgr.sLock(dummyBlk);
+        concurrencyMgr.xLock(dummyBlk);
         return fm.append(filename);
     }
 
